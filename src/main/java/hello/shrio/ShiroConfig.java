@@ -1,6 +1,9 @@
 package hello.shrio;
 
 
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
+import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -100,13 +103,20 @@ public class ShiroConfig {
         return myModularRealmAuthenticator;
     }
 
+    /**
+     *
+     * @param realm 负责权限
+     * @param servletContainerSessionManager session
+     * @param cacheManager 缓存
+     * @return
+     */
     @Bean
-    public SecurityManager securityManager(SessionManager servletContainerSessionManager, CacheManager cacheManager) {
+    public SecurityManager securityManager(Realm realm,SessionManager servletContainerSessionManager, CacheManager cacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setAuthenticator(myModularRealmAuthenticator());
         securityManager.setCacheManager(cacheManager);
         securityManager.setSessionManager(servletContainerSessionManager);
-
+        securityManager.setRealm(realm);
         return securityManager;
     }
 

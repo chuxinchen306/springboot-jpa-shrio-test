@@ -2,6 +2,7 @@ package hello.admin;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,10 @@ public class AdminController {
         return "Saved";
     }
 
+    @RequiresPermissions(value = "haha")
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<AdminDo> getAllUsers(){
+        Subject subject = SecurityUtils.getSubject();
         return userRepository.findAll();
     }
 
